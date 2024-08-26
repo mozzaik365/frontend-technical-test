@@ -19,6 +19,6 @@ export type MemeCardType = {
     y: number;
   }[];
   author: MemeCardAuthorType;
-  comments: MemeCardCommentType[];
+  comments?: MemeCardCommentType[];
   createdAt: string;
 };

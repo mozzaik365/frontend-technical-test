@@ -3,7 +3,6 @@ import React from "react";
 import { useState } from "react";
 
 import { CaretDown, CaretUp, Chat } from "@phosphor-icons/react";
-import { format } from "timeago.js";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -20,22 +19,29 @@ import {
   LinkBox,
   LinkOverlay,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 
 import { createMemeComment, getUserById } from "../../api/api";
 import { MemeCardCommentType } from "../../common/types/meme";
+import { fetchComments } from "../../api/meme.service";
+import MemeCardCommentsSection from "./meme-card-comments-section";
 
 interface MemeCardFooterProps {
-  meme: any;
+  memeId: string;
+  commentsCount: string;
 }
 
 // Needs more refactor.
-const MemeCardFooter: React.FC<MemeCardFooterProps> = ({ meme }) => {
+const MemeCardFooter: React.FC<MemeCardFooterProps> = ({
+  memeId,
+  commentsCount,
+}) => {
   const token = useAuthToken();
   const [commentContent, setCommentContent] = useState<{
     [key: string]: string;
   }>({});
+
+  const [commentsList, setCommentsList] = useState<MemeCardCommentType[]>([]);
 
   const [openedCommentSection, setOpenedCommentSection] = useState<
     string | null
@@ -54,26 +60,29 @@ const MemeCardFooter: React.FC<MemeCardFooterProps> = ({ meme }) => {
     },
   });
 
+  const loadComments = async () => {
+    if (!openedCommentSection && commentsCount) {
+      setCommentsList(await fetchComments(token, memeId));
+    }
+    setOpenedCommentSection(openedCommentSection === memeId ? null : memeId);
+  };
+
   return (
     <>
       <LinkBox as={Box} py={2} borderBottom="1px solid black">
         <Flex justifyContent="space-between" alignItems="center">
           <Flex alignItems="center">
             <LinkOverlay
-              data-testid={`meme-comments-section-${meme.id}`}
+              data-testid={`meme-comments-section-${memeId}`}
               cursor="pointer"
-              onClick={() =>
-                setOpenedCommentSection(
-                  openedCommentSection === meme.id ? null : meme.id
-                )
-              }
+              onClick={() => loadComments()}
             >
-              <Text data-testid={`meme-comments-count-${meme.id}`}>
-                {meme.commentsCount} comments
+              <Text data-testid={`meme-comments-count-${memeId}`}>
+                {commentsCount} comments
               </Text>
             </LinkOverlay>
             <Icon
-              as={openedCommentSection !== meme.id ? CaretDown : CaretUp}
+              as={openedCommentSection !== memeId ? CaretDown : CaretUp}
               ml={2}
               mt={1}
             />
@@ -81,15 +90,15 @@ const MemeCardFooter: React.FC<MemeCardFooterProps> = ({ meme }) => {
           <Icon as={Chat} />
         </Flex>
       </LinkBox>
-      <Collapse in={openedCommentSection === meme.id} animateOpacity>
+      <Collapse in={openedCommentSection === memeId} animateOpacity>
         <Box mb={6}>
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              if (commentContent[meme.id]) {
+              if (commentContent[memeId]) {
                 mutate({
-                  memeId: meme.id,
-                  content: commentContent[meme.id],
+                  memeId: memeId,
+                  content: commentContent[memeId],
                 });
               }
             }}
@@ -108,49 +117,15 @@ const MemeCardFooter: React.FC<MemeCardFooterProps> = ({ meme }) => {
                 onChange={(event) => {
                   setCommentContent({
                     ...commentContent,
-                    [meme.id]: event.target.value,
+                    [memeId]: event.target.value,
                   });
                 }}
-                value={commentContent[meme.id]}
+                value={commentContent[memeId]}
               />
             </Flex>
           </form>
         </Box>
-        <VStack align="stretch" spacing={4}>
-          {meme.comments.map((comment: MemeCardCommentType) => (
-            <Flex key={comment.id}>
-              <Avatar
-                borderWidth="1px"
-                borderColor="gray.300"
-                size="sm"
-                name={comment.author.username}
-                src={comment.author.pictureUrl}
-                mr={2}
-              />
-              <Box p={2} borderRadius={8} bg="gray.50" flexGrow={1}>
-                <Flex justifyContent="space-between" alignItems="center">
-                  <Flex>
-                    <Text
-                      data-testid={`meme-comment-author-${meme.id}-${comment.id}`}
-                    >
-                      {comment.author.username}
-                    </Text>
-                  </Flex>
-                  <Text fontStyle="italic" color="gray.500" fontSize="small">
-                    {format(comment.createdAt)}
-                  </Text>
-                </Flex>
-                <Text
-                  color="gray.500"
-                  whiteSpace="pre-line"
-                  data-testid={`meme-comment-content-${meme.id}-${comment.id}`}
-                >
-                  {comment.content}
-                </Text>
-              </Box>
-            </Flex>
-          ))}
-        </VStack>
+        <MemeCardCommentsSection memeId={memeId} commentsList={commentsList} />
       </Collapse>
     </>
   );

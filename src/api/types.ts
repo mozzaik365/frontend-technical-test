@@ -8,22 +8,24 @@ export type GetUserByIdResponse = {
   pictureUrl: string;
 };
 
+export type MemeResult = {
+  id: string;
+  authorId: string;
+  pictureUrl: string;
+  description: string;
+  commentsCount: string;
+  texts: {
+    content: string;
+    x: number;
+    y: number;
+  }[];
+  createdAt: string;
+};
+
 export type GetMemesResponse = {
   total: number;
   pageSize: number;
-  results: {
-    id: string;
-    authorId: string;
-    pictureUrl: string;
-    description: string;
-    commentsCount: string;
-    texts: {
-      content: string;
-      x: number;
-      y: number;
-    }[];
-    createdAt: string;
-  }[];
+  results: MemeResult[];
 };
 
 export type MemeCommentResult = {

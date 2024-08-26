@@ -14,10 +14,10 @@ interface MemeCardProps {
 
 const MemeCard: React.FC<MemeCardProps> = ({ meme }) => {
   return (
-    <VStack key={meme.id} p={4} width="full" align="stretch">
+    <VStack p={4} width="full" align="stretch">
       <MemeCardHeader meme={meme} />
-      <MemeCardBody id={meme.id} description={meme.description} />
-      <MemeCardFooter meme={meme} />
+      <MemeCardBody meme={meme} />
+      <MemeCardFooter memeId={meme.id} commentsCount={meme.commentsCount} />
     </VStack>
   );
 };

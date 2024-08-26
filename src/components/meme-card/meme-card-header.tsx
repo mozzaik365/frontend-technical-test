@@ -12,33 +12,26 @@ interface MemeCardHeaderProps {
 }
 
 const MemeCardHeader: React.FC<MemeCardHeaderProps> = ({ meme }) => {
-  const { id, createdAt, pictureUrl, texts, author } = meme;
+  const { id, createdAt, author } = meme;
 
   return (
-    <>
-      <Flex justifyContent="space-between" alignItems="center">
-        <Flex>
-          <Avatar
-            borderWidth="1px"
-            borderColor="gray.300"
-            size="xs"
-            name={author.username}
-            src={author.pictureUrl}
-          />
-          <Text ml={2} data-testid={`meme-author-${id}`}>
-            {author.username}
-          </Text>
-        </Flex>
-        <Text fontStyle="italic" color="gray.500" fontSize="small">
-          {format(createdAt)}
+    <Flex justifyContent="space-between" alignItems="center">
+      <Flex>
+        <Avatar
+          borderWidth="1px"
+          borderColor="gray.300"
+          size="xs"
+          name={author.username}
+          src={author.pictureUrl}
+        />
+        <Text ml={2} data-testid={`meme-author-${id}`}>
+          {author.username}
         </Text>
       </Flex>
-      <MemePicture
-        pictureUrl={pictureUrl}
-        texts={texts}
-        dataTestId={`meme-picture-${id}`}
-      />
-    </>
+      <Text fontStyle="italic" color="gray.500" fontSize="small">
+        {format(createdAt)}
+      </Text>
+    </Flex>
   );
 };
 
