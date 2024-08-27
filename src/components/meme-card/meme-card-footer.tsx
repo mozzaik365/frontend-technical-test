@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { CaretDown, CaretUp, Chat } from "@phosphor-icons/react";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 import { jwtDecode } from "jwt-decode";
 import { useAuthToken } from "../../contexts/authentication";
@@ -19,12 +19,13 @@ import {
   LinkBox,
   LinkOverlay,
   Text,
+  Button,
 } from "@chakra-ui/react";
 
 import { createMemeComment, getUserById } from "../../api/api";
-import { MemeCardCommentType } from "../../common/types/meme";
 import { fetchComments } from "../../api/meme.service";
 import MemeCardCommentsSection from "./meme-card-comments-section";
+import { Loader } from "../loader";
 
 interface MemeCardFooterProps {
   memeId: string;
@@ -40,8 +41,6 @@ const MemeCardFooter: React.FC<MemeCardFooterProps> = ({
   const [commentContent, setCommentContent] = useState<{
     [key: string]: string;
   }>({});
-
-  const [commentsList, setCommentsList] = useState<MemeCardCommentType[]>([]);
 
   const [openedCommentSection, setOpenedCommentSection] = useState<
     string | null
@@ -60,10 +59,26 @@ const MemeCardFooter: React.FC<MemeCardFooterProps> = ({
     },
   });
 
+  const { hasNextPage, isFetchingNextPage, fetchNextPage, data } =
+    useInfiniteQuery({
+      queryFn: async ({ pageParam = 1 }) =>
+        fetchComments(token, memeId, pageParam),
+      queryKey: [memeId],
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, pages) => {
+        return Math.ceil(lastPage.total / lastPage.pageSize) > pages.length
+          ? pages.length + 1
+          : undefined;
+      },
+      refetchOnWindowFocus: false,
+      enabled: false,
+    });
+
   const loadComments = async () => {
     if (!openedCommentSection && commentsCount) {
-      setCommentsList(await fetchComments(token, memeId));
+      fetchNextPage();
     }
+    // Probable refactor soon...
     setOpenedCommentSection(openedCommentSection === memeId ? null : memeId);
   };
 
@@ -125,7 +140,20 @@ const MemeCardFooter: React.FC<MemeCardFooterProps> = ({
             </Flex>
           </form>
         </Box>
-        <MemeCardCommentsSection memeId={memeId} commentsList={commentsList} />
+        <MemeCardCommentsSection
+          memeId={memeId}
+          commentsList={data?.pages.flatMap((commentPages) =>
+            commentPages.results.map((comment) => comment)
+          )}
+        />
+        <Flex justifyContent="center" mt={4}>
+          {hasNextPage && !isFetchingNextPage && (
+            <Button mb={2} onClick={() => fetchNextPage()}>
+              Load More
+            </Button>
+          )}
+          {isFetchingNextPage && <Loader data-testid="meme-comments-loader" />}
+        </Flex>
       </Collapse>
     </>
   );

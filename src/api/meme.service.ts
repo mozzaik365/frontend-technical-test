@@ -1,31 +1,24 @@
 import { MemeCardCommentType, MemeCardType } from "../common/types/meme";
 import { getUserById, getMemeComments, getMemes } from "./api";
-import { MemeCommentResult, MemeResult } from "./types";
+import { MemeResult } from "./types";
 
 // Fetch comments on click.
-export async function fetchComments(token: string, memeId: string) {
-  const comments: MemeCommentResult[] = [];
-  const firstPage = await getMemeComments(token, memeId, 1);
-  comments.push(...firstPage.results);
+export async function fetchComments(
+  token: string,
+  memeId: string,
+  page: number
+) {
+  const commentPage = await getMemeComments(token, memeId, page);
 
-  // Needs pagination and optimisation.
-  const remainingCommentPages =
-    Math.ceil(firstPage.total / firstPage.pageSize) - 1;
-
-  for (let i = 0; i < remainingCommentPages; i++) {
-    const page = await getMemeComments(token, memeId, i + 2);
-    comments.push(...page.results);
-  }
-
-  const promiseMeComments = comments.map(async (comment) => {
+  // Deals with concurrent calls while addind the author to all comments
+  const promiseMeComments = commentPage.results.map(async (comment) => {
     const author = await getUserById(token, comment.authorId);
     return { ...comment, author };
   });
-
   const commentsWithAuthor: MemeCardCommentType[] =
     await Promise.all(promiseMeComments);
 
-  return commentsWithAuthor;
+  return { ...commentPage, results: commentsWithAuthor };
 }
 
 async function completeMemeData(token: string, meme: MemeResult) {
@@ -39,29 +32,17 @@ async function completeMemeData(token: string, meme: MemeResult) {
   };
 }
 
-export async function getMemesService(token: string) {
-  // Function in meme.service
+export async function getMemesService(token: string, page: number = 1) {
+  const memePage = await getMemes(token, page);
 
-  // Don't we need total and pageSize? Maybe for pagination?
-  // For the moment I leave this as it is.
-  const memes: MemeResult[] = [];
-
-  const firstPage = await getMemes(token, 1);
-
-  memes.push(...firstPage.results);
-
-  // Add a pagination later
-  /* const remainingPages =
-        Math.ceil(firstPage.total / firstPage.pageSize) - 1;
-      for (let i = 0; i < remainingPages; i++) {
-        const page = await getMemes(token, i + 2);
-        memes.push(...page.results);
-      } */
-
-  const promiseMeMemes = memes.map((meme) => completeMemeData(token, meme));
-
+  // Deals with concurrent calls while addind the author to all memes
+  const promiseMeMemes = memePage.results.map((meme) =>
+    completeMemeData(token, meme)
+  );
   const memesWithAuthorAndComments: MemeCardType[] =
     await Promise.all(promiseMeMemes);
 
-  return memesWithAuthorAndComments;
+  memePage.results.push(...memesWithAuthorAndComments);
+
+  return { ...memePage, results: memesWithAuthorAndComments };
 }

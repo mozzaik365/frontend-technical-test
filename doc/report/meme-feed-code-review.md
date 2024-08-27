@@ -17,7 +17,7 @@ Your role here will be to:
 
 ## Other issues
 
-- It seems that changing the code doesn't always produce changes in the application; along with the state of login not being persisted, this is a loss of development time on refresh.
+- It seems that changing the code after an error doesn't produce changes in the application; along with the state of login not being persisted, this is a loss of development time on refresh.
 
 # The solution
 
@@ -36,7 +36,7 @@ The solution consist in general to first make the code readible, the feed usable
 
 ## API calls big fix
 
-- Started by destroying the first for loop and transforming it into a map function with a promise.all inside. Page render performance increased from 3s to 2s.
+- Started by destroying the first for loop and transforming it into a map function with a Promise.all() inside. Page render performance increased from 3s to 2s.
 - Found out there is a pagination for comments; commented out for the moment, trasfomed the for loop similarly to the first one, page render performance increased from 2s to < 1s.
 - Moved the new functions into its own service file, for reusability and separation of concerns.
 - To save even more time comments are actually loaded when the user clicks on the corresponding button in the UI; page load does less requests now.
@@ -50,14 +50,16 @@ Further performance optimisation can come by reducing the number of API calls, b
 - For the comments, same thing, they could come with the author to save some API calls.
 - A caching system could be put in place to avoid the extra calls.
 
-Another aspect is the pagination for the comments. Ideally we want to have a pagination inside the comment section, but cut it out for time budget.
+Other considerations:
 
-- A spinner or a skeleton list can be added while waiting for the comments to be fetched.
-- Even with no pagination an optimisation over api calls in the comments could have been added.
+- A optimisation over api calls in the comments could have been added, by adding the author directly from the back-end.
 
 ## Pagination
 
-- TODO
+- Tanstack offers a hook for pagination called useInfiniteQuery. That was used for the whole pagination.
+- Implemented an infinite scroll with a "Load More" button. There is a known issue with duplicated entries if, during the browsing, new memes go into the feed. It can either be solved in the back-end, or it could be solved by filtering the list of memes and deleting the duplicate (which creates scalability problems as the feed grows), or find any other scalable solution (a creative one could be filtering only the last 10 (pageSize) memes, and if all 10 are duplicates, refetch the next page).
+- The refresh on page focus was toggled.
+- Implemented the same solution over the comments for pagination.
 
 ### Futher optimisation
 
@@ -68,5 +70,6 @@ Another aspect is the pagination for the comments. Ideally we want to have a pag
 For the purpose of the exercise and being in a reasonable delivery time some aspects were avoided:
 
 - Catching errors from the various API calls.
-- Creating new UI (from confirmation/error toasters messages to extra pagination UI in comments).
+- Creating new UI (from confirmation/error toasters messages) with the exepction for the load more button.
+- Elegant UX solutions (like infinite scrolling without a load more button or animations)
 - Using useMemo or any other render optimisation methods.

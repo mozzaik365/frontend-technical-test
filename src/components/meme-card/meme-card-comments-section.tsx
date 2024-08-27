@@ -5,7 +5,7 @@ import { MemeCardCommentType } from "../../common/types/meme";
 
 interface MemeCardCommentsSectionProps {
   memeId: string;
-  commentsList: MemeCardCommentType[];
+  commentsList?: MemeCardCommentType[];
 }
 
 const MemeCardCommentsSection: React.FC<MemeCardCommentsSectionProps> = ({
@@ -14,7 +14,7 @@ const MemeCardCommentsSection: React.FC<MemeCardCommentsSectionProps> = ({
 }) => {
   return (
     <VStack align="stretch" spacing={4}>
-      {commentsList.map((comment: MemeCardCommentType) => (
+      {commentsList?.map((comment: MemeCardCommentType) => (
         <Flex key={comment.id}>
           <Avatar
             borderWidth="1px"
