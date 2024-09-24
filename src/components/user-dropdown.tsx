@@ -43,14 +43,19 @@ export const UserDropdown: React.FC = () => {
                 src={user?.pictureUrl}
                 border="1px solid white"
               />
-              <Text color="white">
-                {user?.username}
-              </Text>
-              <Icon color="white" ml={2} as={isOpen ? CaretUp : CaretDown} mt={1} />
+              <Text color="white">{user?.username}</Text>
+              <Icon
+                color="white"
+                ml={2}
+                as={isOpen ? CaretUp : CaretDown}
+                mt={1}
+              />
             </Flex>
           </MenuButton>
           <MenuList>
-            <MenuItem icon={<Icon as={SignOut} />} onClick={signout}>Sign Out</MenuItem>
+            <MenuItem icon={<Icon as={SignOut} />} onClick={signout}>
+              Sign Out
+            </MenuItem>
           </MenuList>
         </>
       )}

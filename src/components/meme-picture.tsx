@@ -18,7 +18,7 @@ const REF_FONT_SIZE = 36;
 export const MemePicture: React.FC<MemePictureProps> = ({
   pictureUrl,
   texts: rawTexts,
-  dataTestId = '',
+  dataTestId = "",
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const dimensions = useDimensions(containerRef, true);

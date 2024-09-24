@@ -11,7 +11,10 @@ import {
 } from "@tanstack/react-router";
 import { render } from "@testing-library/react";
 
-function createTestRouter(component: (...args: any) => React.ReactNode, currentUrl: string) {
+function createTestRouter(
+  component: (...args: any) => React.ReactNode,
+  currentUrl: string,
+) {
   const rootRoute = createRootRoute({
     component: Outlet,
   });
@@ -33,7 +36,7 @@ function createTestRouter(component: (...args: any) => React.ReactNode, currentU
 type RenderWithRouterParams = {
   component: (...args: any) => React.ReactNode;
   Wrapper?: React.ComponentType<PropsWithChildren>;
-  onNavigate?: ListenerFn<RouterEvents['onBeforeNavigate']>;
+  onNavigate?: ListenerFn<RouterEvents["onBeforeNavigate"]>;
   currentUrl?: string;
 };
 
@@ -41,10 +44,10 @@ export function renderWithRouter({
   component,
   Wrapper = React.Fragment,
   onNavigate = () => {},
-  currentUrl = "/"
+  currentUrl = "/",
 }: RenderWithRouterParams) {
   const router = createTestRouter(component, currentUrl);
-  router.subscribe('onBeforeNavigate', onNavigate);
+  router.subscribe("onBeforeNavigate", onNavigate);
   const renderResult = render(
     <Wrapper>
       {/* @ts-expect-error */}

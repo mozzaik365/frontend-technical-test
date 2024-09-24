@@ -1,11 +1,12 @@
 # Mozzaik365 : Frontend technical test
 
-## Introduction 
+## Introduction
 
 Welcome to the repository of **Mozzaik365's Frontend Technical Test**.  
 If you have landed here, it must mean that you have started a recruitment process with us and it is time to **show us your coding skills** 💪!
 
 The goal of this test is to put you in a situation as close as what you would experience at **Mozzaik365**, which means:
+
 - **A stress-free exercise** to do at home with nobody watching you and you can take the time you need
 - **Nothing to setup from scratch**, we provide you a base project to work on and all you have to do is to code
 - **You can use any tool** that you use on a daily basis such as Google, StackOverflow and even generative AI (ChatGPT, Github Copilot)
@@ -42,16 +43,19 @@ The project is built the following stack:
 Start by forking this repository and clone it locally.
 
 Then, install the node modules:
+
 ```bash
 npm install
 ```
 
 Once the dependencies are installed, you can run the project by running the following command:
+
 ```bash
 npm run dev
 ```
 
 You'll be able to access the application from `http://localhost:5173/` and you can use the following credentials to login:
+
 - Username: `MemeMaster`
 - Password: `password`
 
@@ -73,9 +77,10 @@ An OpenAPI documentation is also available [here] (https://fetestapi.int.mozzaik
 ## Instructions
 
 Before you start the exercises, here are a few recommendations to make sure you meet all the expectations:
-  - As we said, this exercise is meant to put you in a real-life situation. This means that the code and commits you produce should be of the quality you would expect from your colleagues. 
-  - From the moment you start working on this project, it becomes your project. So you're free to change anything in it if you think it's necessary.
-  - Don't hesitate to impress us by going beyond what is asked in the exercise.
+
+- As we said, this exercise is meant to put you in a real-life situation. This means that the code and commits you produce should be of the quality you would expect from your colleagues.
+- From the moment you start working on this project, it becomes your project. So you're free to change anything in it if you think it's necessary.
+- Don't hesitate to impress us by going beyond what is asked in the exercise.
 
 Now that you know everything, we wish you a happy coding! 🎉
 
@@ -86,6 +91,7 @@ The reason for this is that it was built by **Jodric**, our intern.
 He's really nice, but he still lacks some good reflexes when it comes to performance.
 
 Your role here will be to:
+
 - Identify the cause of the problem and write a report in `doc/review/meme-feed-code-review.md`.
 - Refactor the code to make it as clean and performant as possible. The UI must remain the same, but you can adjust the UX if you feel it's necessary, as long as you don't degrade it.
 
@@ -95,8 +101,9 @@ Below each meme, you'll find a comment form that allows you to add a comment to 
 At the moment, it doesn't seem to work, although some people have said that they can see their comment after refreshing the page.
 
 Your job here will be to:
+
 - Identify and fix the problem
-- Write a unit test to make sure the feature works correctly. 
+- Write a unit test to make sure the feature works correctly.
 
 ### Ex 3 - Finish the meme creator
 
@@ -105,10 +112,12 @@ The user can create as many captions as they like and position them anywhere on 
 Once submitted, the user will be redirected to the homepage to view their newly created meme.
 
 The feature has already been started but never finished, so your mission is to:
+
 - Understand what's left to do
 - Do the remaining development
 
-⚠️ *For this exercise, the OpenAPI documentation is incorrect (it's a known Swagger UI bug that doesn't handle nested objects correctly). The `POST /api/memes` endpoint expects a `multipart/form-data` body of the form:*
+⚠️ _For this exercise, the OpenAPI documentation is incorrect (it's a known Swagger UI bug that doesn't handle nested objects correctly). The `POST /api/memes` endpoint expects a `multipart/form-data` body of the form:_
+
 ```
 Picture=<binary data>
 Description=Your description
@@ -128,6 +137,7 @@ However, you'll see that, as soon as you refresh the page, you get disconnected.
 Also, when the token expires, the application just stop working instead of asking the user to login again.
 
 So we need you to:
+
 - Make sure that the authentication persist through refreshes
 - Redirect the user to the login page whenever the token expires
 
@@ -138,4 +148,3 @@ Once you have finished this test, you can submit it through this [form](https://
 We'll try to review it in the next 48 hours and get back to you to talk about your code!
 
 In the meantime, if you have any question, don't hesitate to contact your hiring manager.
-

@@ -10,5 +10,5 @@ export const theme = extendTheme({
         padding: 0,
       },
     },
-  }
+  },
 });
