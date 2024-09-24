@@ -28,14 +28,19 @@ function renderNoPicture() {
 
 function renderMemePicture(memePicture: MemePictureProps, open: () => void) {
   return (
-    <Box width="full" height="full" position="relative" __css={{
-      "&:hover .change-picture-button": {
-        display: "inline-block",
-      },
-      "& .change-picture-button": {
-        display: "none",
-      },
-    }}>
+    <Box
+      width="full"
+      height="full"
+      position="relative"
+      __css={{
+        "&:hover .change-picture-button": {
+          display: "inline-block",
+        },
+        "& .change-picture-button": {
+          display: "none",
+        },
+      }}
+    >
       <MemePicture {...memePicture} />
       <Button
         className="change-picture-button"

@@ -31,7 +31,7 @@ const memes = [
     ],
     createdAt: "2021-09-01T12:00:00Z",
   },
-]
+];
 
 const comments = [
   {
@@ -55,7 +55,7 @@ const comments = [
     content: "dummy comment 3",
     createdAt: "2021-09-01T12:00:00Z",
   },
-]
+];
 
 export const handlers = [
   http.post<{}, { username: string; password: string }>(
