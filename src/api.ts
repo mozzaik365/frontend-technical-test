@@ -1,3 +1,8 @@
+import { Meme } from "./types/meme";
+import { MemeComment } from "./types/meme-comment";
+import { PaginationResponse } from "./types/pagination-response";
+import { User } from "./types/user";
+
 const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 export class UnauthorizedError extends Error {
@@ -45,22 +50,13 @@ export async function login(
   }).then((res) => checkStatus(res).json());
 }
 
-export type GetUserByIdResponse = {
-  id: string;
-  username: string;
-  pictureUrl: string;
-};
-
 /**
  * Get a user by their id
  * @param token
  * @param id
  * @returns
  */
-export async function getUserById(
-  token: string,
-  id: string
-): Promise<GetUserByIdResponse> {
+export async function getUserById(token: string, id: string): Promise<User> {
   return await fetch(`${BASE_URL}/users/${id}`, {
     headers: {
       "Content-Type": "application/json",
@@ -68,28 +64,6 @@ export async function getUserById(
     },
   }).then((res) => checkStatus(res).json());
 }
-
-export type MemeText = {
-  content: string;
-  x: number;
-  y: number;
-};
-
-export type Meme = {
-  id: string;
-  authorId: string;
-  pictureUrl: string;
-  description: string;
-  commentsCount: string;
-  texts: MemeText[];
-  createdAt: string;
-};
-
-export type GetMemesResponse = {
-  total: number;
-  pageSize: number;
-  results: Meme[];
-};
 
 /**
  * Get the list of memes for a given page
@@ -100,7 +74,7 @@ export type GetMemesResponse = {
 export async function getMemes(
   token: string,
   page: number
-): Promise<GetMemesResponse> {
+): Promise<PaginationResponse<Meme>> {
   return await fetch(`${BASE_URL}/memes?page=${page}`, {
     headers: {
       "Content-Type": "application/json",
@@ -108,18 +82,6 @@ export async function getMemes(
     },
   }).then((res) => checkStatus(res).json());
 }
-
-export type GetMemeCommentsResponse = {
-  total: number;
-  pageSize: number;
-  results: {
-    id: string;
-    authorId: string;
-    memeId: string;
-    content: string;
-    createdAt: string;
-  }[];
-};
 
 /**
  * Get comments for a meme
@@ -131,7 +93,7 @@ export async function getMemeComments(
   token: string,
   memeId: string,
   page: number
-): Promise<GetMemeCommentsResponse> {
+): Promise<PaginationResponse<MemeComment>> {
   return await fetch(`${BASE_URL}/memes/${memeId}/comments?page=${page}`, {
     headers: {
       "Content-Type": "application/json",

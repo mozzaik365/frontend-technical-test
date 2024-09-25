@@ -1,15 +1,12 @@
-import { useCallback, useState } from "react";
 import { useAuthToken } from "../contexts/authentication";
-import {
-  keepPreviousData,
-  useInfiniteQuery,
-  useQuery,
-} from "@tanstack/react-query";
-import { getMemes, GetMemesResponse } from "../api";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getMemes } from "../api";
+import { PaginationResponse } from "../types/pagination-response";
+import { Meme } from "../types/meme";
 
 function getNextPageParam(
-  lastPage: GetMemesResponse,
-  pages: GetMemesResponse[]
+  lastPage: PaginationResponse<Meme>,
+  pages: PaginationResponse<Meme>[]
 ) {
   const totalPages = Math.ceil(lastPage.total / lastPage.pageSize);
   return pages.length + 1 <= totalPages ? pages.length + 1 : undefined;
@@ -18,7 +15,7 @@ function getNextPageParam(
 export function useFeed() {
   const token = useAuthToken();
 
-  const { fetchNextPage, data, isFetching, hasNextPage } = useInfiniteQuery({
+  const { fetchNextPage, data, hasNextPage } = useInfiniteQuery({
     queryKey: ["memes"],
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getMemes(token, pageParam),
