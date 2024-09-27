@@ -1,24 +1,21 @@
-import {
-  Avatar,
-  Box,
-  Collapse,
-  Flex,
-  Icon,
-  LinkBox,
-  LinkOverlay,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 
 import { MemePicture } from "./meme-picture";
 import { format } from "timeago.js";
 import { Meme } from "../types/meme";
 import { MemeAuthor } from "./meme-author";
+import { MemeCardComments } from "./meme-card-comments";
 
 type MemeCardrops = {
   meme: Meme;
+  commentsOpened: boolean;
+  onOpenComments: (memeId: string) => void;
 };
-export const MemeCard: React.FC<MemeCardrops> = ({ meme }) => {
+export const MemeCard: React.FC<MemeCardrops> = ({
+  meme,
+  commentsOpened,
+  onOpenComments,
+}) => {
   return (
     <VStack p={4} width="full" align="stretch">
       <Flex justifyContent="space-between" alignItems="center">
@@ -49,6 +46,13 @@ export const MemeCard: React.FC<MemeCardrops> = ({ meme }) => {
           </Text>
         </Box>
       </Box>
+
+      <MemeCardComments
+        memeId={meme.id}
+        commentCount={meme.commentsCount}
+        opened={commentsOpened}
+        onOpen={onOpenComments}
+      />
 
       {/* <LinkBox as={Box} py={2} borderBottom="1px solid black">
         <Flex justifyContent="space-between" alignItems="center">

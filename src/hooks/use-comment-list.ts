@@ -1,15 +1,14 @@
 import { useAuthToken } from "../contexts/authentication";
+import { getMemeComments } from "../api";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getMemes } from "../api";
 import { getNextPageParam } from "../utils/get-next-page-param";
 
-export function useFeed() {
+export function useCommentList(memeId: string) {
   const token = useAuthToken();
-
   return useInfiniteQuery({
-    queryKey: ["memes"],
+    queryKey: ["comments", memeId],
     initialPageParam: 1,
-    queryFn: ({ pageParam }) => getMemes(token, pageParam),
+    queryFn: ({ pageParam }) => getMemeComments(token, memeId, pageParam),
     getNextPageParam,
   });
 }
