@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Input } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Input, Text } from "@chakra-ui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSubmitComment } from "../hooks/use-submit-comment";
 import { useMyProfile } from "../hooks/use-my-profile";
@@ -15,18 +15,29 @@ export const CommentForm: React.FC<CommentFormProps> = ({ memeId }) => {
   const {
     register,
     handleSubmit,
-    watch,
+    resetField,
+    setError,
     formState: { errors },
   } = useForm<Inputs>();
 
-  console.log(",,,memeId", memeId);
   const { mutate } = useSubmitComment(memeId);
 
   const user = useMyProfile();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log("on submit");
-    mutate(data);
+    const trimed = data.content.trim();
+    if (trimed.length === 0) {
+      return;
+    }
+    try {
+      mutate(data);
+      resetField("content");
+    } catch (e) {
+      setError("content", {
+        type: "custom",
+        message: "Oopps! Something went wrong. Try again.",
+      });
+    }
   };
 
   return (
@@ -46,6 +57,11 @@ export const CommentForm: React.FC<CommentFormProps> = ({ memeId }) => {
             {...register("content", { required: true })}
           />
         </Flex>
+        {errors.content && (
+          <Text color="red.500" fontSize="sm">
+            {errors.content.message}
+          </Text>
+        )}
       </form>
     </Box>
   );
