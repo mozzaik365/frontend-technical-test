@@ -10,6 +10,7 @@ import {
 import { CaretDown, CaretUp, Chat } from "@phosphor-icons/react";
 import { useCallback } from "react";
 import { CommentList } from "./comment-list";
+import { CommentForm } from "./comment-form";
 
 type MemeCardCommentsProps = {
   memeId: string;
@@ -27,6 +28,7 @@ export const MemeCardComments: React.FC<MemeCardCommentsProps> = ({
   const handleClickOpen = useCallback(() => {
     onOpen(memeId);
   }, [memeId, onOpen]);
+
   return (
     <>
       <LinkBox as={Box} py={2} borderBottom="1px solid black">
@@ -49,6 +51,7 @@ export const MemeCardComments: React.FC<MemeCardCommentsProps> = ({
         </Flex>
       </LinkBox>
       <Collapse in={opened} animateOpacity unmountOnExit>
+        <CommentForm memeId={memeId} />
         <CommentList memeId={memeId} />
       </Collapse>
     </>

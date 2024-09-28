@@ -1,30 +1,41 @@
-import { Box } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Input } from "@chakra-ui/react";
 import { useCallback } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { User } from "../types/user";
+import { createMemeComment } from "../api";
+import { useMutation } from "@tanstack/react-query";
+import { useSubmitComment } from "../hooks/use-submit-comment";
+import { useMyProfile } from "../hooks/use-my-profile";
 
-export const CommentForm: React.FC = () => {
-  const handleSubmit = useCallback((event) => {
-    event.preventDefault();
-    if (commentContent[meme.id]) {
-      mutate({
-        memeId: meme.id,
-        content: commentContent[meme.id],
-      });
-    }
-  });
+type CommentFormProps = {
+  memeId: string;
+};
+
+type Inputs = {
+  content: string;
+};
+
+export const CommentForm: React.FC<CommentFormProps> = ({ memeId }) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  console.log(",,,memeId", memeId);
+  const { mutate } = useSubmitComment(memeId);
+
+  const user = useMyProfile();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log("on submit");
+    mutate(data);
+  };
 
   return (
     <Box mb={6}>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (commentContent[meme.id]) {
-            mutate({
-              memeId: meme.id,
-              content: commentContent[meme.id],
-            });
-          }
-        }}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Flex alignItems="center">
           <Avatar
             borderWidth="1px"
@@ -36,13 +47,7 @@ export const CommentForm: React.FC = () => {
           />
           <Input
             placeholder="Type your comment here..."
-            onChange={(event) => {
-              setCommentContent({
-                ...commentContent,
-                [meme.id]: event.target.value,
-              });
-            }}
-            value={commentContent[meme.id]}
+            {...register("content", { required: true })}
           />
         </Flex>
       </form>
