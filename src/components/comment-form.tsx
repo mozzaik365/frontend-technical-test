@@ -1,9 +1,5 @@
 import { Avatar, Box, Flex, Input } from "@chakra-ui/react";
-import { useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { User } from "../types/user";
-import { createMemeComment } from "../api";
-import { useMutation } from "@tanstack/react-query";
 import { useSubmitComment } from "../hooks/use-submit-comment";
 import { useMyProfile } from "../hooks/use-my-profile";
 
