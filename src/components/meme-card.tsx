@@ -11,6 +11,7 @@ type MemeCardrops = {
   commentsOpened: boolean;
   onOpenComments: (memeId: string) => void;
 };
+//TODO: fix timezone from backend
 export const MemeCard: React.FC<MemeCardrops> = ({
   meme,
   commentsOpened,
@@ -24,7 +25,7 @@ export const MemeCard: React.FC<MemeCardrops> = ({
           nameTestId={`meme-author-${meme.id}`}
         />
         <Text fontStyle="italic" color="gray.500" fontSize="small">
-          {format(meme.createdAt)}
+          {format(meme.createdAt + "Z")}
         </Text>
       </Flex>
       <MemePicture

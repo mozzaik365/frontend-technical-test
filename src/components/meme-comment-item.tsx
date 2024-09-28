@@ -13,7 +13,7 @@ export const MemeCommentItem: React.FC<MemeCommentProps> = ({
   memeId,
 }: MemeCommentProps) => {
   const { data: author } = useUser(comment.authorId);
-
+  //TODO:fix timezone from backend
   return (
     <Flex>
       <Avatar
@@ -33,7 +33,7 @@ export const MemeCommentItem: React.FC<MemeCommentProps> = ({
             </Text>
           </Flex>
           <Text fontStyle="italic" color="gray.500" fontSize="small">
-            {format(comment.createdAt)}
+            {format(comment.createdAt + "Z")}
           </Text>
         </Flex>
         <Text
