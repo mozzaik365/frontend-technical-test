@@ -6,6 +6,7 @@ import { useUser } from "../hooks/use-user";
 type MemeCommentProps = {
   comment: MemeComment;
   memeId: string;
+  dataTestId?: string;
 };
 
 export const MemeCommentItem: React.FC<MemeCommentProps> = ({
