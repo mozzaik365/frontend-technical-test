@@ -4,19 +4,17 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
-
-export type AuthenticationState =
-  | {
-      isAuthenticated: true;
-      token: string;
-      userId: string;
-    }
-  | {
-      isAuthenticated: false;
-    };
+import {
+  authEventEmitter,
+  getAuthState,
+  logout,
+  setToken,
+} from "../services/api";
+import { AuthenticationState } from "../types/authentication-state";
 
 export type Authentication = {
   state: AuthenticationState;
@@ -25,35 +23,48 @@ export type Authentication = {
 };
 
 export const AuthenticationContext = createContext<Authentication | undefined>(
-  undefined,
+  undefined
 );
 
 export const AuthenticationProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
-  const [state, setState] = useState<AuthenticationState>({
-    isAuthenticated: false,
-  });
+  const [state, setState] = useState<AuthenticationState>(getAuthState());
 
-  const authenticate = useCallback(
-    (token: string) => {
-      setState({
-        isAuthenticated: true,
-        token,
-        userId: jwtDecode<{ id: string }>(token).id,
-      });
-    },
-    [setState],
-  );
+  useEffect(() => {
+    const login = () => {
+      console.log("handle login event");
+      setState(getAuthState());
+    };
+
+    const logout = () => {
+      console.log("handle logout event");
+      setState(getAuthState());
+    };
+
+    authEventEmitter.on("login", login);
+    authEventEmitter.on("logout", logout);
+    return () => {
+      console.log("unmount");
+      authEventEmitter.off("login", login);
+      authEventEmitter.off("logout", logout);
+    };
+  }, []);
+
+  const authenticate = useCallback((jwt: string) => {
+    setToken(jwt);
+  }, []);
 
   const signout = useCallback(() => {
-    setState({ isAuthenticated: false });
-  }, [setState]);
+    logout();
+  }, []);
 
   const contextValue = useMemo(
     () => ({ state, authenticate, signout }),
-    [state, authenticate, signout],
+    [state, authenticate, signout]
   );
+
+  console.log("rerender auth context");
 
   return (
     <AuthenticationContext.Provider value={contextValue}>
@@ -66,7 +77,7 @@ export function useAuthentication() {
   const context = useContext(AuthenticationContext);
   if (!context) {
     throw new Error(
-      "useAuthentication must be used within an AuthenticationProvider",
+      "useAuthentication must be used within an AuthenticationProvider"
     );
   }
   return context;

@@ -1,12 +1,7 @@
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { createMemeComment } from "../api";
-import { useAuthToken } from "../contexts/authentication";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Meme } from "../types/meme";
 import { PaginationResponse } from "../types/pagination-response";
+import { createMemeComment } from "../services/api";
 
 type InfiniteData = {
   pages: PaginationResponse<Meme>[];
@@ -29,10 +24,9 @@ function incrementeCommentCount(data: InfiniteData, memeId: string) {
 
 export function useSubmitComment(memeId: string) {
   const queryClient = useQueryClient();
-  const token = useAuthToken();
   return useMutation({
     mutationFn: async (data: { content: string }) => {
-      await createMemeComment(token, memeId, data.content);
+      await createMemeComment(memeId, data.content);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", memeId] });
