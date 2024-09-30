@@ -18,7 +18,7 @@ export const MemeCard: React.FC<MemeCardrops> = ({
   onOpenComments,
 }) => {
   return (
-    <VStack p={4} width="full" align="stretch">
+    <VStack id={`meme-${meme.id}`} p={4} width="full" align="stretch">
       <Flex justifyContent="space-between" alignItems="center">
         <MemeAuthor
           authorId={meme.authorId}
