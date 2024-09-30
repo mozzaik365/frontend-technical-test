@@ -1,12 +1,11 @@
 import { Avatar, Box, Flex, Text } from "@chakra-ui/react";
-import { MemeComment } from "../types/meme-comment";
 import { format } from "timeago.js";
 import { useUser } from "../hooks/use-user";
+import { MemeComment } from "../services/api";
 
 type MemeCommentProps = {
   comment: MemeComment;
   memeId: string;
-  dataTestId?: string;
 };
 
 export const MemeCommentItem: React.FC<MemeCommentProps> = ({
