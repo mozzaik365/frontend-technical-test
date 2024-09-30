@@ -2,9 +2,9 @@ import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 
 import { MemePicture } from "./meme-picture";
 import { format } from "timeago.js";
-import { Meme } from "../types/meme";
 import { MemeAuthor } from "./meme-author";
 import { MemeCardComments } from "./meme-card-comments";
+import { Meme } from "../services/api";
 
 type MemeCardrops = {
   meme: Meme;

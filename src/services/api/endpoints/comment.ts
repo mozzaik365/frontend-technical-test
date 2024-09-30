@@ -9,6 +9,8 @@ const memeCommentSchema = z.object({
   createdAt: z.string(),
 });
 
+export type MemeComment = z.infer<typeof memeCommentSchema>;
+
 const schema = z.object({
   results: z.array(memeCommentSchema),
   total: z.number(),

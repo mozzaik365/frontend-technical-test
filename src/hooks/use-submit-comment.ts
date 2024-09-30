@@ -1,10 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Meme } from "../types/meme";
-import { PaginationResponse } from "../types/pagination-response";
-import { createMemeComment } from "../services/api";
+import { createMemeComment, GetMemePageResponse } from "../services/api";
 
 type InfiniteData = {
-  pages: PaginationResponse<Meme>[];
+  pages: GetMemePageResponse[];
   pageParams: unknown;
 };
 
