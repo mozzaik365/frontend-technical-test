@@ -24,6 +24,7 @@ type RouterContext = {
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => {
     const { state } = useAuthentication();
+
     return (
       <Flex width="full" height="full" direction="column">
         {/* Header */}
