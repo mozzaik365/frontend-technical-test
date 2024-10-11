@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   Flex,
   Heading,
@@ -11,12 +12,10 @@ import {
   Link,
   Outlet,
 } from "@tanstack/react-router";
-import {
-  AuthenticationState,
-  useAuthentication,
-} from "../contexts/authentication";
+import { useAuthentication } from "../contexts/authentication";
 import { UserDropdown } from "../components/user-dropdown";
 import { Plus } from "@phosphor-icons/react";
+import { AuthenticationState } from "../types/authentication-state";
 
 type RouterContext = {
   authState: AuthenticationState;
@@ -25,6 +24,7 @@ type RouterContext = {
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => {
     const { state } = useAuthentication();
+
     return (
       <Flex width="full" height="full" direction="column">
         {/* Header */}

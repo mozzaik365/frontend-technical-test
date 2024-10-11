@@ -19,13 +19,19 @@
     "@phosphor-icons/react": "^2.1.7",
     "@tanstack/react-query": "^5.51.17",
     "@tanstack/react-router": "^1.46.0",
+    "@types/js-cookie": "^3.0.6",
+    "axios": "^1.7.7",
+    "eventemitter3": "^5.0.1",
     "framer-motion": "^11.3.19",
+    "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.52.1",
-    "timeago.js": "^4.0.2"
+    "react-intersection-observer": "^9.13.1",
+    "timeago.js": "^4.0.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@tanstack/router-devtools": "^1.46.0",
