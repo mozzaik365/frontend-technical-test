@@ -5,6 +5,7 @@ import { format } from "timeago.js";
 import { MemeAuthor } from "./meme-author";
 import { MemeCardComments } from "./meme-card-comments";
 import { Meme } from "../services/api";
+import { TimeAgo } from "./time-ago";
 
 type MemeCardrops = {
   meme: Meme;
@@ -25,7 +26,7 @@ export const MemeCard: React.FC<MemeCardrops> = ({
           nameTestId={`meme-author-${meme.id}`}
         />
         <Text fontStyle="italic" color="gray.500" fontSize="small">
-          {format(meme.createdAt + "Z")}
+          <TimeAgo date={meme.createdAt} />
         </Text>
       </Flex>
       <MemePicture
