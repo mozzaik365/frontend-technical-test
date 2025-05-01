@@ -23,3 +23,9 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+
+.direnv/
+.envrc
+.vscode/
+.vite/
